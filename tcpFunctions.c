@@ -34,3 +34,8 @@ int connect_server(){
 void write_to_server(char *toWrite, int len){
     write(sock_fd, toWrite, len);
 }
+
+void disconnect_server(){
+    shutdown(sock_fd, SHUT_RDWR);
+    close(sock_fd);
+}
