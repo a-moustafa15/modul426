@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # Owened Apps
     'accounts',
     'homepage',
+    'bootstrap3',
 
     
 
@@ -123,4 +124,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bewegungs_melder/assest')]
 
 #LOGIN_URL = '//accounts/login/'
-#AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
