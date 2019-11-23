@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}User Login {% endblock %}
+{% load bootstrap3 %}
+{% block content %}
+
+<h2>User login</h2>
+<div class="container">
+    <form action="." method='post' class="form big-form ">
+        
+        <div class="form-group">
+            {% csrf_token %}
+            {% bootstrap_form form %} 
+            {% for msg in messages%}
+            <p style=color:red;>{{msg}}</p>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary right_buttons">LogIn</button>
+    </form>
+
+
+{% endblock %}
