@@ -1,5 +1,7 @@
 #include <gpioFunctions.h>
 #include <moveSensorFunctions.h>
+#include <tcpFunctions.h>
+#include <timeFunctions.h>
 
 #include <pthread.h>
 
@@ -19,7 +21,13 @@ void* read_movements(void *arg){
         get_pin_value(MOVE_SENSOR_PIN, &value);
         old_value = value;
         if(value && value != old_value){
-            //send to tcp socket
+            long time = currentMillis();
+            char buffer[4];
+            buffer[0] = (char)((time >> 24) & 0xFF) ;
+            buffer[1] = (char)((time >> 16) & 0xFF) ;
+            buffer[2] = (char)((time >> 8) & 0XFF);
+            buffer[3] = (char)((time & 0XFF));
+            write_to_server(buffer, 4);
         }
     }
 }
