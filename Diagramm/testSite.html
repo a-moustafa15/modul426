@@ -10,8 +10,6 @@
 </head>
 
 <body>
-    <div id="dailydata"></div>
-    <div name="weeklydata"></div>
     <canvas id="dailyChart"></canvas>
     <canvas id="weeklyChart"></canvas>
     <script>
@@ -30,8 +28,7 @@
         var dataToday = []
         var dataLastWeek = []
 
-        var datatoshow = []
-        var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var dayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 
         var today = new Date();
 
@@ -48,25 +45,37 @@
             console.log(roundMinutes(stamp));
 
             if (stamp >= todayOneWeekAgo) {
-                dataLastWeek.push(stamp);
+                var dayName = dayNames[stamp.getDay()];
+                dataLastWeek.push(dayName);
             }
         });
+
+        var map = dataLastWeek.reduce(function (prev, cur) {
+            prev[cur] = (prev[cur] || 0) + 1;
+            return prev;
+        }, {});
+
+        console.log(map);
+
+       
+
+        //console.log(JSON.stringify(map));
 
         function roundMinutes(date) {
             date.setHours(date.getHours() + Math.round(date.getMinutes() / 60));
             date.setMinutes(0);
-
             return date;
         }
 
         console.log("heute: " + dataToday);
         console.log("ganze woche: " + dataLastWeek);
 
+
         var ctx = document.getElementById('dailyChart').getContext('2d');
         var DailyChart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: datatoshow,
+                labels: dataToday,
                 datasets: [{
                     label: 'Daten Tag',
                     data: [0, 10, 5, 2, 20, 30, 45],
@@ -75,8 +84,22 @@
             }
         });
 
+        var ctx = document.getElementById('weeklyChart').getContext('2d');
+        var WeeklyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dataLastWeek,
+                datasets: [{
+                    label: 'Daten Woche',
+                    data: [0, 10, 5, 2, 20, 30, 45],
+                    backgroundColor: "rgb(200, 0, 100, 0.5)"
+                }]
+            }
+        });
+
 
         DailyChart.canvas.parentNode.style.width = '500px';
+        WeeklyChart.canvas.parentNode.style.width = '500px';
 
     </script>
 </body>
