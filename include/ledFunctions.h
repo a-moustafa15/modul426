@@ -6,8 +6,6 @@
 #define LED_GREEN GPIO_15
 #define LED_BLUE GPIO_18
 
-#endif
-
 int led_set_pins();
 
 int led_wait_for_server();
@@ -15,3 +13,5 @@ int led_wait_for_server();
 int led_server_connected();
 
 void led_move_detected();
+
+#endif
