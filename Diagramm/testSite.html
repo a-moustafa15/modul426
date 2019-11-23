@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+
+<body>
+    <div id="dailydata"></div>
+    <div name="weeklydata"></div>
+    <canvas id="dailyChart"></canvas>
+    <canvas id="weeklyChart"></canvas>
+    <script>
+
+        var Data = [
+            '2019-11-23T05:50:00',
+            '2019-11-23T06:50:00',
+            '2019-11-23T09:50:00',
+            '2019-11-20T10:10:00',
+            '2019-11-20T12:50:00',
+            '2019-11-20T15:10:00',
+            '2019-11-20T18:20:00',
+            '2019-11-20T20:50:00'
+        ]
+
+        var dataToday = []
+        var dataLastWeek = []
+
+        var datatoshow = []
+        var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        var today = new Date();
+
+        var todayOneWeekAgo = new Date();
+        todayOneWeekAgo.setDate(today.getDate() - 7);
+
+        Data.forEach(timestamp => {
+            var stamp = new Date(timestamp);
+
+            if (stamp.getDate() == today.getDate()) {
+                dataToday.push(stamp);
+            }
+
+            console.log(roundMinutes(stamp));
+
+            if (stamp >= todayOneWeekAgo) {
+                dataLastWeek.push(stamp);
+            }
+        });
+
+        function roundMinutes(date) {
+            date.setHours(date.getHours() + Math.round(date.getMinutes() / 60));
+            date.setMinutes(0);
+
+            return date;
+        }
+
+        console.log("heute: " + dataToday);
+        console.log("ganze woche: " + dataLastWeek);
+
+        var ctx = document.getElementById('dailyChart').getContext('2d');
+        var DailyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: datatoshow,
+                datasets: [{
+                    label: 'Daten Tag',
+                    data: [0, 10, 5, 2, 20, 30, 45],
+                    backgroundColor: "rgb(0, 200, 100, 0.5)"
+                }]
+            }
+        });
+
+
+        DailyChart.canvas.parentNode.style.width = '500px';
+
+    </script>
+</body>
+
+</html>
