@@ -1,0 +1,50 @@
+<html>
+    <head>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <body>
+    <h1>
+            Willkommen im Zeitplan-Tool
+        </h1>
+
+       
+           <p>Wann möchtest du aufnehmen?</p>
+           <input type="checkbox" name="timebutton" class="btn btn-default btn1" >Ich möchte nur zu einer bestimmten zeit aufnehmen</button>
+           <p class="form-control input1" style="display: none">von</p>
+           <input type="time" class="form-control input1" id="timefrom" value="" style="display: none">
+           <p class="form-control input1" style="display: none">bis</p>
+           <input type="time" class="form-control input1" id="timeuntil" value="" style="display: none">
+         
+            <br>
+            <br>
+            <button onclick="window.location.reload();">Save</button>
+<!--         
+if(costum_time_from_database !empty){
+
+value where id = timefrom (costum_time_from_database(from))
+value where id = timeuntil (costum_time_from_database(until))
+
+}
+-->
+<script>
+$(function() {
+  $('.btn1').click(function() {
+    $('.input1').toggle()
+  });
+});
+
+$(function() {
+  $('.btn2').click(function() {
+    $('.input2').toggle()
+  });
+});
+
+$(".close").click(function() {
+  $(this).next("input").hide();
+});
+</script>    
+    <br>
+        <br>
+        </body>
+    </head>
+</html>
