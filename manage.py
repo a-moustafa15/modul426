@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from sensor.tcpsocket import start_listening
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bewegungs_melder.settings')
@@ -18,4 +18,5 @@ def main():
 
 
 if __name__ == '__main__':
+    start_listening()
     main()

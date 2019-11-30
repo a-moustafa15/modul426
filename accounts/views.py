@@ -4,7 +4,7 @@ from django.views.generic import ListView, CreateView, DetailView
 from .models import User
 from django.views.generic import View
 from django.contrib.auth.models import auth
-from .forms import UserLoginForm, UserCreationForm, UserUpdateForm
+from .forms import UserLoginForm, UserCreationForm
 from django.contrib import messages
 
 
@@ -33,7 +33,7 @@ class LogIn(View):
         """
 
         :param request: Url get request
-        :return: will return an empty form  login
+        :return: will return an empty form (loginForm)
         """
         form = UserLoginForm()
         return render(request, self.template_name, {'form': form})
@@ -59,7 +59,7 @@ class LogIn(View):
 
 class Logout(View):
     """
-    the class is to logout
+    the class is to logout a User
     """
     def get(self, request):
         """

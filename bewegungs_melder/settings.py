@@ -14,10 +14,10 @@ SECRET_KEY = '#%qby6+r3=3!1@)ek&wvqy7b1dep)4iv7#u&i(q36xm%5^h*w='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
 
 DEBUG = True
-#ALLOWED_HOSTS = ['10.102.100.81', '10.102.100.145']
+ALLOWED_HOSTS = ['10.102.100.34']
 
 
 # Application definition
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # Owened Apps
     'accounts',
     'homepage',
+    'sensor',
     'bootstrap3',
 
     
@@ -121,7 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bewegungs_melder/assest')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bewegungs_melder/assets')]
 
 #LOGIN_URL = '//accounts/login/'
 AUTH_USER_MODEL = 'accounts.User'

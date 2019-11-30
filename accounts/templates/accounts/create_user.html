@@ -7,11 +7,10 @@
 <h2>Create user</h2>
 <div class="container">
     <form action="." method='post' class="form big-form ">
-        
         <div class="form-group">
             {% csrf_token %}
             {% bootstrap_form form %} 
-            {% for msg in messages%}
+            {% for msg in messages %}
             <p style=color:red;>{{msg}}</p>
             {% endfor %}
         </div>
