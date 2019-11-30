@@ -2,6 +2,7 @@
 #include <moveSensorFunctions.h>
 #include <tcpFunctions.h>
 #include <timeFunctions.h>
+#include <ledFunctions.h>
 
 #include <pthread.h>
 
@@ -14,14 +15,25 @@ int move_sensor_set_pin(){
     return response;
 }
 
+#include <stdio.h>
+
 void* read_movements(void *arg){
     int old_value = 0;
+    int interval = 0;
     while(detect_movements){
+        interval++;
+        if(interval == 50){
+            interval = 0;
+            if(!check_server_connection())
+                continue;
+        }
         int value;
         get_pin_value(MOVE_SENSOR_PIN, &value);
-        old_value = value;
         if(value && value != old_value){
             long time = currentMillis();
+            
+            led_move_detected(MOVE_SENSOR_SWITCH_TIME);
+
             char buffer[4];
             buffer[0] = (char)((time >> 24) & 0xFF) ;
             buffer[1] = (char)((time >> 16) & 0xFF) ;
@@ -29,6 +41,7 @@ void* read_movements(void *arg){
             buffer[3] = (char)((time & 0XFF));
             write_to_server(buffer, 4);
         }
+        old_value = value;
     }
 }
 

@@ -12,6 +12,6 @@ int led_wait_for_server();
 
 int led_server_connected();
 
-void led_move_detected();
+int led_move_detected(int switch_time);
 
 #endif

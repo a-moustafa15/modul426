@@ -1,4 +1,7 @@
 #include <tcpFunctions.h>
+#include <moveSensorFunctions.h>
+#include <ledFunctions.h>
+#include <ctrlcHandler.h>
 
 #include <stdio.h> 
 #include <sys/socket.h> 
@@ -24,6 +27,7 @@ int connect_server(){
     }
     
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0){
+        close(sock);
         return -1; 
     }
 
@@ -31,11 +35,31 @@ int connect_server(){
     return 1;    
 }
 
-void write_to_server(char *toWrite, int len){
-    write(sock_fd, toWrite, len);
-}
-
 void disconnect_server(){
     shutdown(sock_fd, SHUT_RDWR);
     close(sock_fd);
+}
+
+void reconnect(){
+    disconnect_server();
+    stop_detect_movements();
+    led_wait_for_server();
+    while(connect_server() != 1 && is_running());
+    led_server_connected();
+    start_detect_movements();
+}
+
+int check_server_connection(){
+    char c = (char)0x01;
+    if(write(sock_fd, &c, 1) < 0){
+        reconnect();
+        return 0;
+    }
+        
+    return 1;
+}
+
+void write_to_server(char *toWrite, int len){
+    if(write(sock_fd, toWrite, len) < 0)
+        reconnect();
 }

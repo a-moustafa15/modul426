@@ -1,0 +1,14 @@
+[Unit]
+Description=sensorApp
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=sensorApp
+ExecStop= /bin/kill -2 $MAINPID
+KillMode=none
+
+[Install]
+WantedBy=multi-user.target

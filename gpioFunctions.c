@@ -8,9 +8,11 @@
 GPIO_PIN pins[MAX_PINS];
 
 int fd_export = -1;
+int fd_unexport = -1;
 
 int init_gpio(){
     fd_export = open("/sys/class/gpio/export", O_WRONLY);
+    fd_unexport = open("/sys/class/gpio/unexport", O_WRONLY);
     if (fd_export == -1) {
         return R_UNABLE_OPEN_FILE;
     }
@@ -105,9 +107,7 @@ int get_pin_value(GPIO pin, int *value){
 }
 
 int unexport_pin(GPIO pin){
-
-    int fd = open("/sys/class/gpio/unexport", O_WRONLY);
-    if (fd == -1) {
+    if (fd_unexport == -1) {
         return R_UNABLE_OPEN_FILE;
     }
 
@@ -115,17 +115,15 @@ int unexport_pin(GPIO pin){
 
     sprintf(tmp, "%i", pin);
 
-    if (write(fd, &tmp, (pin < 10) ? 1 : 2) != 2) {
+    if (write(fd_unexport, &tmp, (pin < 10) ? 1 : 2) != 2) {
         return R_UNABLE_WRITE_FILE;
     }
 
-    fd = pins[pin - 2].file_descriptor;
+    int fd = pins[pin - 2].file_descriptor;
 
     if(fd != 0){
         close(fd);
     }
-
-    close(fd);
 
     return R_SUCCESS;
 }
@@ -137,4 +135,5 @@ int unexport_all_pins(){
             unexport_pin(i+2);
         }
     }
+    close(fd_unexport);
 }
