@@ -22,13 +22,18 @@
             '2019-11-20T12:50:00',
             '2019-11-20T15:10:00',
             '2019-11-20T18:20:00',
-            '2019-11-20T20:50:00'
+            '2019-11-20T20:50:00',
+            '2019-11-23T05:50:00',
+            '2019-11-23T06:50:00',
+            '2019-11-26T09:50:00',
+            '2019-11-27T10:10:00',
+            '2019-11-26T12:50:00',
+            '2019-11-26T15:10:00',
+            '2019-11-29T18:20:00',
+            '2019-11-29T20:50:00'
         ]
 
-        var dataToday = []
         var dataLastWeek = []
-        var dataLastWeekDays = [];
-        var dataLastWeekRecords = [];
         var dayNamesInOrder = [];
 
         var dayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
@@ -64,7 +69,9 @@
             var temporaryDayName = dayNames[timeStampAsDate.getDay()]
             var temporaryDay = new day(timeStampAsDate, temporaryDayName, 0);
 
-            dataLastWeek.push(temporaryDay)
+            if (temporaryDay.date >= todayOneWeekAgo) {
+                dataLastWeek.push(temporaryDay);
+            }
         });
 
         // compressed the same days to one and count the records up
@@ -96,7 +103,7 @@
         var DailyChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: dataToday,
+                labels: [1, 2, 3, 4, 5],
                 datasets: [{
                     label: 'Daten Tag',
                     data: [0, 10, 5, 2, 20, 30, 45],
