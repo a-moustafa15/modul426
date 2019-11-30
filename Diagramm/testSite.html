@@ -14,7 +14,7 @@
     <canvas id="weeklyChart"></canvas>
     <script>
 
-        var Data = [
+        var dummyData = [
             '2019-11-23T05:50:00',
             '2019-11-23T06:50:00',
             '2019-11-23T09:50:00',
@@ -27,6 +27,9 @@
 
         var dataToday = []
         var dataLastWeek = []
+        var dataLastWeekDays = [];
+        var dataLastWeekRecords = [];
+        var dayNamesInOrder = [];
 
         var dayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 
@@ -35,40 +38,60 @@
         var todayOneWeekAgo = new Date();
         todayOneWeekAgo.setDate(today.getDate() - 7);
 
-        Data.forEach(timestamp => {
-            var stamp = new Date(timestamp);
-
-            if (stamp.getDate() == today.getDate()) {
-                dataToday.push(stamp);
+        var day = class Day {
+            constructor(date, dayName, records = 0) {
+                this.date = date;
+                this.dayName = dayName;
+                this.records = records;
             }
+        };
 
-            console.log(roundMinutes(stamp));
+        // basic list wich contains every dayname a week ago with 0 records (so the name will be displayed anyway(if theres no record in the db))
+        for (i = 0; i <= 6; i++) {
+            var dayDate = new Date();
+            dayDate.setDate(dayDate.getDate() - i);
+            var temporaryDayDate = dayDate;
+            var temporaryDayName = dayNames[temporaryDayDate.getDay()]
+            var temporaryDay = new day(temporaryDayDate, temporaryDayName, 0);
 
-            if (stamp >= todayOneWeekAgo) {
-                var dayName = dayNames[stamp.getDay()];
-                dataLastWeek.push(dayName);
+            dataLastWeek.push(temporaryDay);
+            dayNamesInOrder.push(temporaryDay);
+        }
+
+        // push every record from db data to the basic list
+        dummyData.forEach(timeStamp => {
+            var timeStampAsDate = new Date(timeStamp);
+            var temporaryDayName = dayNames[timeStampAsDate.getDay()]
+            var temporaryDay = new day(timeStampAsDate, temporaryDayName, 0);
+
+            dataLastWeek.push(temporaryDay)
+        });
+
+        // compressed the same days to one and count the records up
+        var compressedList = [];
+        dataLastWeek.forEach(function (day) {
+            compressedList[day.dayName] = (compressedList[day.dayName] || 0) + 1;
+        })
+
+        // arrays wich will be used as the chartdata
+        var daysToShow = [];
+        var recordsToShow = [];
+
+        // fills the arrays with the data from the compressed list
+        dayNamesInOrder.forEach(weekDay => {
+            if (weekDay.date >= todayOneWeekAgo) {
+                daysToShow.push(weekDay.dayName);
+                recordsToShow.push(compressedList[weekDay.dayName]);
             }
         });
 
-        var map = dataLastWeek.reduce(function (prev, cur) {
-            prev[cur] = (prev[cur] || 0) + 1;
-            return prev;
-        }, {});
+        // function roundMinutes(date) {
+        //     date.setHours(date.getHours() + Math.round(date.getMinutes() / 60));
+        //     date.setMinutes(0);
+        //     return date;
+        // }
 
-        console.log(map);
-
-        //console.log(JSON.stringify(map));
-
-        function roundMinutes(date) {
-            date.setHours(date.getHours() + Math.round(date.getMinutes() / 60));
-            date.setMinutes(0);
-            return date;
-        }
-
-        console.log("heute: " + dataToday);
-        console.log("ganze woche: " + dataLastWeek);
-
-
+        // chart for daily Data
         var ctx = document.getElementById('dailyChart').getContext('2d');
         var DailyChart = new Chart(ctx, {
             type: 'bar',
@@ -82,22 +105,24 @@
             }
         });
 
+        // chart for weeklyData
         var ctx = document.getElementById('weeklyChart').getContext('2d');
         var WeeklyChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: dataLastWeek,
+                labels: daysToShow.reverse(),
                 datasets: [{
                     label: 'Daten Woche',
-                    data: [0, 10, 5, 2, 20, 30, 45],
+                    data: recordsToShow.reverse(),
                     backgroundColor: "rgb(200, 0, 100, 0.5)"
                 }]
             }
         });
 
 
-        DailyChart.canvas.parentNode.style.width = '500px';
-        WeeklyChart.canvas.parentNode.style.width = '500px';
+        DailyChart.canvas.parentNode.style.width = '800px';
+        WeeklyChart.canvas.parentNode.style.width = '800px';
+
 
     </script>
 </body>
