@@ -77,7 +77,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'group_2',
         'PORT': 3306,
-        'PASSWORD': 'Sandra12@@',
+        'PASSWORD': 'pass',
         'USER': 'root',
         'HOST': 'localhost',
     }
